@@ -1,10 +1,13 @@
-import React from "react";
+import React, {  } from "react";
 import { useNavigate } from "react-router-dom";
+import { CountContext } from "../context_api/CountContext";
 
-export const LanguageCard = ({ curLang }) => {
-  const { name, fixes, color = "bg-slate-900", icon } = curLang;
+export const LanguageCard = ({ curLang,count }) => {
+  const { name, color = "bg-slate-900", icon } = curLang;
   const Icon = icon;
+  
   const navigate = useNavigate();
+
 
   const handleClick = () => {
     navigate(`/language/${encodeURIComponent(name)}`,
@@ -50,7 +53,7 @@ export const LanguageCard = ({ curLang }) => {
         <h1 className="text-2xl font-semibold text-white tracking-wide">
           {name}
         </h1>
-        <p className="text-sm text-slate-400 mt-1">{fixes} fixes available</p>
+        <p className="text-sm text-slate-400 mt-1">{count} fixes available</p>
       </div>
 
       <div className="absolute -top-8 -right-8 w-24 h-24 bg-purple-500 opacity-10 blur-3xl pointer-events-none"></div>

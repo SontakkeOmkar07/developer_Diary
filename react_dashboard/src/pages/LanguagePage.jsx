@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {  useState } from "react";
 import { IoMdArrowBack } from "react-icons/io";
 import { AddErrorModal } from "../components/AddErrorModal";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -8,24 +8,58 @@ import { IoMdAdd } from "react-icons/io";
 import { CiSearch } from "react-icons/ci";
 import { FaCode } from "react-icons/fa";
 import { useEffect } from "react";
-import { getData, postData } from "../api/GetApi";
+import { deleteData, getData, postData } from "../api/GetApi";
+// import { CountContext } from "../context_api/CountContext";
+// import { CountProvider } from "../context_api/CountProvider";
 
 export const LanguagePage = () => {
-  const [showPage, setShowPage] = useState(false);
-  const [errors, setErrors] = useState([]);
 
-  console.log("data aya");
+
+  const [showPage, setShowPage] = useState(false);
+
+  const [errors, setErrors] = useState([]);
 
   const [selectError, setSelectError] = useState(null);
 
   const [loading, setLoading] = useState(true);
 
-  const handleClick = (error) => {
+  const [searched, setSearched] = useState("");
+
+  //check length
+
+  // const errorCount = errors.length;
+
+  const searchData = searched
+    ? errors.filter((curError) =>
+        curError.title?.toLowerCase().includes(searched.toLowerCase())
+      )
+    : errors;
+
+  console.log(searchData);
+
+  //handleDelete
+
+  const handleDelete = async (id) => {
+    try {
+      const res = await deleteData(id);
+      console.log(res);
+
+      setErrors((prevErrors) => prevErrors?.filter((error) => error.id !== id));
+
+      setSelectError((prev) => (prev?.id === id ? null : prev));
+    } catch (error) {
+      console.error("Card not deleted", error);
+    }
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const onClick = (error) => {
     setSelectError(error);
   };
 
   const { language } = useParams();
 
+  
   const normalizeLanguage = (name = "") => {
     return decodeURIComponent(name)
       .toLowerCase()
@@ -54,8 +88,6 @@ export const LanguagePage = () => {
     fetchedData();
   }, [language]);
 
-  console.log("data gaya");
-
   const { state } = useLocation();
 
   const color = state?.color || "#22c55e";
@@ -64,6 +96,12 @@ export const LanguagePage = () => {
   const handleBack = () => navigate(-1);
 
   console.log(language, normalizeLanguage(language));
+
+
+
+  //use context to get data
+
+  // const {increseCount}  = useContext(CountContext);
 
   const handleSaveError = async (newError) => {
     try {
@@ -80,16 +118,24 @@ export const LanguagePage = () => {
       setErrors((prev) =>
         Array.isArray(prev) ? [...prev, res.data.data] : [res.data.data]
       ); //this line is very important to give the data from backend
+      
+      setSelectError(null);
       setShowPage(false);
+      setSearched("");
+      errors.length;
     } catch (error) {
       console.error(error.message);
     }
   };
 
+
+  
+  
+
   return (
     <>
       <section className="min-h-screen flex">
-        <aside className="w-100 p-4 bg-gray-800">
+        <aside className="w-1/4  p-4 bg-gray-800 shrink-0">
           <header>
             <h1
               onClick={handleBack}
@@ -124,9 +170,11 @@ export const LanguagePage = () => {
               <div className="relative mt-5">
                 <CiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 text-lg font-bold" />
                 <input
+                  value={searched}
+                  onChange={(e) => setSearched(e.target.value)}
                   type="text"
                   placeholder="Search errors..."
-                  className="w-full pl-10 pr-3 py-2 text-gray-400 bg-slate-900 rounded-md ring-1 ring-slate-700 focus:outline-none focus:ring-1 focus:ring-green-600"
+                  className="w-full pl-10 pr-3 text-white py-2 text-gray-400 bg-slate-900 rounded-md ring-1 ring-slate-700 focus:outline-none focus:ring-1 focus:ring-green-600"
                 />
               </div>
             </section>
@@ -137,30 +185,34 @@ export const LanguagePage = () => {
           <footer>
             <section className="mt-4">
               <ul>
-                {loading ? (
-                  "Loading..."
-                ) : errors.length === 0 ? (
-                  <p className="text-gray-400">No errors found</p>
-                ) : (
-                  errors.map((error) => (
-                    <Card
-                      key={error.id}
-                      error={error}
-                      onClick={handleClick(error)}
-                    />
-                  ))
-                )}
+                {loading
+                  ? "Loading..."
+                  : searchData.map((error) => (
+                      <Card
+                        key={error.id}
+                        error={error}
+                        onClick={() => onClick(error)}
+                        handleDelete={() => {
+                          handleDelete(error.id);
+                        }}
+                      />
+                    ))}
               </ul>
             </section>
           </footer>
         </aside>
+        
 
-        <MainSection setShowPage={setShowPage} selectError={selectError} />
+        
+          <MainSection setShowPage={setShowPage} selectError={selectError}
+           />
+       
       </section>
 
       {showPage && (
         <AddErrorModal
           onSave={handleSaveError}
+         
           onClose={() => setShowPage(false)}
         />
       )}

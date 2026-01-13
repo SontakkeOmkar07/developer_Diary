@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LanguageCard } from "./LanguageCard";
 import { AddLanguageModal } from "./AddLanguageModal";
 import { FaReact } from "react-icons/fa";
@@ -6,9 +6,12 @@ import { FaNode } from "react-icons/fa6";
 import { FaJava } from "react-icons/fa";
 import { IoLogoPython } from "react-icons/io5";
 import { languageIconMap } from "../constants/languageIconMap";
-import { Header } from "./Header";
+import { Name } from "./Name";
 import { IoAddSharp } from "react-icons/io5";
-// import { LanguagePage } from "../pages/LanguagePage";
+import { CountContext } from "../context_api/CountContext";
+import { getAllLanguageCount } from "../api/GetApi";
+import { Header } from "./Header";
+import { Container } from "./Container";
 
 export const DevDebug = () => {
   const [showModal, setShowModal] = useState(false);
@@ -17,16 +20,21 @@ export const DevDebug = () => {
   const closeModal = () => setShowModal(false);
 
   const [languages, setLanguages] = useState([
-    { name: "React", fixes: 3, icon: FaReact, color: "#007FFF" },
-    { name: "Node.js", fixes: 2, icon: FaNode, color: "#55DD33" },
-    { name: "Java", fixes: 2, icon: FaJava, color: "#FF5800" },
-    { name: "Python", fixes: 2, icon: IoLogoPython, color: "#FFFF00" },
+    { name: "React", icon: FaReact, color: "#007FFF" },
+    { name: "Node.js", icon: FaNode, color: "#55DD33" },
+    { name: "Java", icon: FaJava, color: "#FF5800" },
+    { name: "Python", icon: IoLogoPython, color: "#FFFF00" },
   ]);
+
+  const [languageCounts, setLanguageCounts] = useState([]);
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const normalizeLanguage = (name) => {
     return name.toLowerCase().replace(".js", "").replace(/\s+/g, "");
   };
 
+  //handle lang
   const handleAddLanguage = (name, color) => {
     const key = normalizeLanguage(name);
 
@@ -44,23 +52,72 @@ export const DevDebug = () => {
       return;
     }
 
-    const Icon = languageIconMap[key] || FaNode;
-    setLanguages((prev) => [...prev, { name, icon: Icon, color, fixes: 0 }]);
+    const Icon = languageIconMap[key];
+    if (!Icon) {
+      alert("Language icon not found");
+      return;
+    }
+    setLanguages((prev) => [...prev, { name, icon: Icon, color }]);
   };
+
+  // handle count
+
+  //   const {languageCount} = useContext(CountContext);
+
+  // console.log("languageCount:", languageCount);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) return;
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsLoggedIn(true);
+  });
+
+
+  useEffect(() => {
+
+    if(!isLoggedIn) return;
+
+    const fetchedData = async () => {
+      try {
+        const res = await getAllLanguageCount();
+
+        console.log(languageCounts);
+
+        console.log(res.data.data);
+
+        setLanguageCounts(res.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchedData();
+  }, [isLoggedIn]);
 
   return (
     <>
+      <Header />
       <section className="min-h-screen bg-slate-900 p-8">
-        <Header />
+        <Name />
 
         <ul className="flex justify-center gap-8 flex-wrap mt-8">
-          {languages.map((curLang) => (
-            <LanguageCard
-              curLang={curLang}
-              key={curLang.name}
-              normalizeLanguage={normalizeLanguage}
-            />
-          ))}
+          {languages.map((curLang) => {
+            const countLang = languageCounts.find(
+              (count) => count.language === normalizeLanguage(curLang.name)
+            );
+
+            return (
+              <LanguageCard
+                curLang={curLang}
+                key={curLang.name}
+                normalizeLanguage={normalizeLanguage}
+                count={countLang?.count || 0}
+              />
+            );
+          })}
 
           <button
             onClick={handleClick}
@@ -95,6 +152,7 @@ export const DevDebug = () => {
           </button>
         </ul>
       </section>
+<Container /> 
 
       {showModal && (
         <AddLanguageModal
@@ -103,7 +161,8 @@ export const DevDebug = () => {
         />
       )}
 
-      
+       
     </>
+   
   );
 };

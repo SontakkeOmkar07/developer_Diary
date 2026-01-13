@@ -25,17 +25,19 @@ export const AddErrorModal = ({ onClose, onSave }) => {
   const handleSubmit = async(e) => {
     e.preventDefault();
 
-
-   try {
-
-    
      if (!isFormValid()) {
       alert("Please fill all required fields");
       return;
     }
 
+   try {
+
+    
+    
+
     // Add to parent state
     await onSave(storeInput);
+    onClose();
     
    } catch (error) {
     console.error(error.message);
@@ -51,10 +53,10 @@ export const AddErrorModal = ({ onClose, onSave }) => {
   };
 
   const updateSteps = (index, field, value) => {
-    const newSteps = storeInput.steps.map((s,i) =>{
+    const newSteps = storeInput.steps.map((s,i) =>
 
-      i === index ? {...s, [field]: value} : s;
-    })
+      i === index ? {...s, [field]: value} : s
+    );
 
     setStoreInput({ ...storeInput, steps: newSteps });
   };
@@ -81,7 +83,8 @@ export const AddErrorModal = ({ onClose, onSave }) => {
         </header>
 
         <form
-     onSubmit={handleSubmit}
+        onSubmit={handleSubmit}
+   
 
           className="space-y-6 overflow-y-auto pr-3 flex-1 scrollbar scrollbar-thumb-slate-600 scrollbar-track-slate-800 scroll-smooth"
         >
@@ -178,7 +181,7 @@ export const AddErrorModal = ({ onClose, onSave }) => {
               </ul>
             </div>
           </section>
-        </form>
+        
 
         <footer className="flex justify-end gap-4 mt-6 flex-shrink-0">
           <button
@@ -190,7 +193,7 @@ export const AddErrorModal = ({ onClose, onSave }) => {
 
           <button
             type="submit"
-            onClick={handleSubmit}
+            
             
             disabled={!isFormValid()}
             className={`px-6 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white font-semibold transition ${
@@ -202,6 +205,7 @@ export const AddErrorModal = ({ onClose, onSave }) => {
             Save Solution
           </button>
         </footer>
+        </form>
       </div>
     </section>
   );

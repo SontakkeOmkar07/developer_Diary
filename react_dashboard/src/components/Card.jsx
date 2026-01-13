@@ -1,12 +1,13 @@
-import React from 'react'
+import React from "react";
 
-export const Card = ({ error,onClick }) => {
+export const Card = ({ error, onClick, handleDelete }) => {
   const { title, message, tags } = error;
+
+  
 
   return (
     <li
-
-    onClick={onClick}
+      onClick={onClick}
       className="
         group
         w-full
@@ -23,7 +24,6 @@ export const Card = ({ error,onClick }) => {
       "
     >
       <article className="flex flex-col gap-3">
-
         <h1
           className="
             text-white
@@ -42,7 +42,7 @@ export const Card = ({ error,onClick }) => {
           {message}
         </p>
 
-        <div className="mt-auto">
+        <div className="mt-auto flex justify-between">
           <span
             className="
               inline-block
@@ -62,9 +62,18 @@ export const Card = ({ error,onClick }) => {
           >
             {tags}
           </span>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleDelete();
+            }}
+            className="rounded-md bg-red-400 hover:bg-red-500 text-white font-semibold px-3 cursor-pointer "
+          >
+            Delete
+          </button>
         </div>
-
       </article>
     </li>
-  )
-}
+  );
+};

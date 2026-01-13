@@ -1,0 +1,29 @@
+CREATE DATABASE users_data;
+
+USE users_data;
+
+CREATE TABLE users(
+
+id INT AUTO_INCREMENT PRIMARY KEY,
+title VARCHAR(100) NOT NULL,
+message LONGTEXT NOT NULL,
+rootCause LONGTEXT NOT NULL,
+tags VARCHAR(50) NOT NULL,
+steps JSON,
+created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+SELECT * FROM users;
+
+
+
+DESCRIBE users;
+
+DELETE FROM users where id;
+
+ALTER TABLE users ADD COLUMN language VARCHAR(50) NOT NULL;
+
+SELECT DISTINCT language FROM users;
+
+
