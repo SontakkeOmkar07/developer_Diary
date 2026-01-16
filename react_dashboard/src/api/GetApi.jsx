@@ -10,9 +10,12 @@ api.interceptors.request.use(
     const token = localStorage.getItem("token");
 
     console.log("Token attached:", token);
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+    if(!token) return config;
+    if(config.url.includes("/signup")) return config;
+    if(config.url.includes("/login")) return config;
+
+    config.headers.Authorization = `Bearer ${token}`;
+
     return config;
   },
   (err) => Promise.reject(err)

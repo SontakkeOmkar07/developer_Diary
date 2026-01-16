@@ -1,14 +1,36 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
 export const Header = () => {
+  const [login, setLogin] = useState(false);
+
   const navigate = useNavigate();
 
   const handleClick1 = () => {
     navigate("/signup");
   };
-  const handleClick2 = () => {
-    navigate("/login");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setLogin(!!token);
+  }, []);
+
+  const handleLoginLogoutClick = () => {
+    if (login) {
+      //logout
+
+      localStorage.removeItem("token");
+
+      setLogin(false);
+      navigate("/login");
+    } else {
+      // login
+
+      navigate("/login");
+    }
   };
   return (
     <header className="fixed top-0 w-full h-16 bg-gradient-to-r from-slate-950 via-slate-900 to-blue-950 flex items-center shadow-xl backdrop-blur-md z-50 border-b border-slate-800">
@@ -42,18 +64,24 @@ export const Header = () => {
 
         <section className="flex items-center gap-4">
           <button
-            onClick={() => handleClick2()}
+            onClick={() => handleLoginLogoutClick()}
             className="px-5 py-2 rounded-lg text-sm font-semibold text-emerald-400 border border-emerald-500/40 bg-slate-900 hover:bg-slate-800 hover:border-emerald-400 transition-all duration-200"
           >
-            Login
+            {login ? "LogOut" : "Login"}
           </button>
 
-          <button
+          {!login && (
+
+             <button
             onClick={() => handleClick1()}
             className="px-5 py-2 rounded-lg text-sm font-semibold text-slate-900 bg-emerald-400 hover:bg-emerald-500 shadow-md hover:shadow-emerald-500/30 transition-all duration-200"
           >
             Sign Up
           </button>
+
+          )}
+
+         
         </section>
       </div>
     </header>

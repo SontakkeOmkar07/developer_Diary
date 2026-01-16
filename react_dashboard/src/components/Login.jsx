@@ -33,6 +33,7 @@ export const Login = () => {
       console.log(res);
 
       if (res.status === 200) {
+
         localStorage.setItem("token", res.data.token);
 
         setLoginForm({
@@ -43,6 +44,7 @@ export const Login = () => {
       navigate("/");
     } catch (error) {
       console.error("Error :", error.message);
+      
       setError("Please check your email and password correctly.")
     }
   };

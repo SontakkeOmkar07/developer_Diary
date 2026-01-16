@@ -10,6 +10,9 @@ export const SignUp = () => {
     password: "",
   });
 
+
+  // const [error,setError] = useState("");
+
   console.log(signupForm);
 
   const handleChange = (e) => {
@@ -23,6 +26,8 @@ export const SignUp = () => {
 
   const navigate = useNavigate();
 
+
+  //handle submit
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -40,7 +45,8 @@ export const SignUp = () => {
 
       navigate("/");
     } catch (error) {
-      console.error("Error", error.message);
+      console.error("Error message :", error.message);
+      // setError( "Your email & password already exists");
     }
   };
 
@@ -118,6 +124,8 @@ export const SignUp = () => {
               required
             />
           </div>
+
+          {/* {error && <p className="text-sm text-red-500">{error}</p> } */}
 
           <button
             type="submit"
