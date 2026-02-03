@@ -1,3 +1,7 @@
+
+
+
+
 #  DevDiary
 
 DevDiary is a full-stack web application built to help users register, log in securely, and manage their personal data through a clean and responsive interface.
@@ -5,6 +9,9 @@ DevDiary is a full-stack web application built to help users register, log in se
 This project was developed while learning full-stack development and helped me understand how frontend, backend, and databases work together in a real-world application.
 
 ---
+
+
+
 
 ##  Tech Stack
 
