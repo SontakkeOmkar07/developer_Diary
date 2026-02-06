@@ -7,7 +7,7 @@ export const Header = () => {
 
   const navigate = useNavigate();
 
-  const handleClick1 = () => {
+  const handleSignupClick = () => {
     navigate("/signup");
   };
 
@@ -36,7 +36,7 @@ export const Header = () => {
     <header className="fixed top-0 w-full h-16 bg-gradient-to-r from-slate-950 via-slate-900 to-blue-950 flex items-center shadow-xl backdrop-blur-md z-50 border-b border-slate-800">
       <div className="flex items-center justify-between w-full max-w-7xl mx-auto px-10">
         <div className="text-white text-2xl font-bold tracking-wide font-serif">
-          DeveloperDiary<span className="text-emerald-400">.</span>
+          DevDiary<span className="text-emerald-400">.</span>
         </div>
 
         <nav>
@@ -73,7 +73,7 @@ export const Header = () => {
           {!login && (
 
              <button
-            onClick={() => handleClick1()}
+            onClick={() => handleSignupClick()}
             className="px-5 py-2 rounded-lg text-sm font-semibold text-slate-900 bg-emerald-400 hover:bg-emerald-500 shadow-md hover:shadow-emerald-500/30 transition-all duration-200"
           >
             Sign Up

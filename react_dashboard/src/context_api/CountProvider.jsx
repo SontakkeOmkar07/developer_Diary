@@ -6,18 +6,18 @@ import { CountContext } from "./CountContext";
 
 export const CountProvider = ({children}) => {
 
-    const [languageCount,setLangugeCount] = useState({});
+    const [languageCount,setLanguageCount] = useState({});
 
     const increseCount = (language) =>{
 
-        setLangugeCount((prev) => ({
+        setLanguageCount((prev) => ({
             ...prev,
             [language]: (prev[language] || 0) + 1, 
         }));
     }
     const decreaseCount = (language) =>{
 
-        setLangugeCount((prev) => ({
+        setLanguageCount((prev) => ({
             ...prev,
             [language]: Math.max((prev[language] || 1)-1,0),
         }));

@@ -5,8 +5,8 @@ export const Footer = () => {
   return (
     <footer className="bg-slate-950 text-slate-400">
       <div className="text-white text-2xl font-bold tracking-wide font-serif pt-10">
-         <AiFillCode className="text-emerald-400 text-3xl" />
-        DeveloperDiary<span className="text-emerald-400">.</span>
+        <AiFillCode className="text-emerald-400 text-3xl" />
+        DevDiary<span className="text-emerald-400">.</span>
       </div>
 
       <div className="max-w-6xl mx-auto px-6 py-14 grid grid-cols-1 md:grid-cols-3 gap-10">

@@ -5,8 +5,11 @@ import { LanguagePage } from "./pages/LanguagePage";
 import { AppLayout } from "./Layout/AppLayout";
 import { Contact } from "./pages/Contact";
 import { About } from "./pages/About";
+import { signUpData } from "./components/actions/signupAction";
+import { loginData } from "./components/actions/loginAction";
 import { SignUp } from "./components/SignUp";
 import { Login } from "./components/Login";
+
 
 const router = createBrowserRouter([
   {
@@ -28,10 +31,12 @@ const router = createBrowserRouter([
       {
         path: "/signup",
         element: <SignUp />,
+        action: signUpData ,
       },
       {
         path: "/login",
         element: <Login />,
+        action: loginData,
       },
     ],
   },

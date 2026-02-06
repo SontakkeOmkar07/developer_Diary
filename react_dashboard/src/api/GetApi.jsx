@@ -10,15 +10,15 @@ api.interceptors.request.use(
     const token = localStorage.getItem("token");
 
     console.log("Token attached:", token);
-    if(!token) return config;
-    if(config.url.includes("/signup")) return config;
-    if(config.url.includes("/login")) return config;
+    if (!token) return config;
+    if (config.url.includes("/signup")) return config;
+    if (config.url.includes("/login")) return config;
 
     config.headers.Authorization = `Bearer ${token}`;
 
     return config;
   },
-  (err) => Promise.reject(err)
+  (err) => Promise.reject(err),
 );
 
 //post method
@@ -45,13 +45,13 @@ export const getAllLanguageCount = () => {
 
 //signup post method
 
-export const postSignupData = (signupForm) => {
-  return api.post("/signup", signupForm);
+export const postSignupData = (data) => {
+  return api.post("/signup", data);
 };
 //login post method
 
-export const postLoginData = (loginForm) => {
-  return api.post("/login", loginForm);
+export const postLoginData = (data) => {
+  return api.post("/login", data);
 };
 
 // //store token

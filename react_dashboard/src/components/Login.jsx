@@ -1,59 +1,14 @@
-import React, { useState } from "react";
-import { postLoginData } from "../api/GetApi";
-import { useNavigate } from "react-router-dom";
+import { Form, useActionData } from "react-router-dom";
+
 export const Login = () => {
-  const [loginForm, setLoginForm] = useState({
-    email: "",
-    password: "",
-  });
-
-  const [error,setError] = useState("");
-
-
-
-  console.log(loginForm);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setLoginForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const navigate = useNavigate();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const res = await postLoginData(loginForm);
-
-      console.log(res);
-
-      if (res.status === 200) {
-
-        localStorage.setItem("token", res.data.token);
-
-        setLoginForm({
-          email: "",
-          password: "",
-        });
-      }
-      navigate("/");
-    } catch (error) {
-      console.error("Error :", error.message);
-      
-      setError("Please check your email and password correctly.")
-    }
-  };
+  const actionData = useActionData();
 
   return (
     <>
       <section className="flex bg-slate-900 min-h-screen justify-center items-center">
-        <form
-          onSubmit={(e) => handleSubmit(e)}
+        <Form
+          method="POST"
+          action="/login"
           className="flex flex-col gap-4 bg-slate-800 p-6 rounded-lg w-full max-w-md shadow-lg"
         >
           <h1 className="text-2xl font-semibold text-white text-center">
@@ -65,8 +20,7 @@ export const Login = () => {
               Email
             </label>
             <input
-              onChange={(e) => handleChange(e)}
-              value={loginForm.email}
+         
               className="rounded-md px-4 py-2 bg-slate-700 text-white border border-slate-600 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
               placeholder="Enter your email"
               name="email"
@@ -81,8 +35,7 @@ export const Login = () => {
               Password
             </label>
             <input
-              onChange={(e) => handleChange(e)}
-              value={loginForm.password}
+          
               className="rounded-md px-4 py-2 bg-slate-700 text-white border border-slate-600 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
               placeholder="Enter your password"
               type="password"
@@ -92,7 +45,9 @@ export const Login = () => {
             />
           </div>
 
-          {loginForm && <p className="text-sm text-red-500">{error}</p>}
+          {actionData?.error && (
+            <p className="text-sm text-red-500">{actionData.error}</p>
+          )}
 
           <button
             type="submit"
@@ -100,9 +55,7 @@ export const Login = () => {
           >
             Submit
           </button>
-
-
-        </form>
+        </Form>
       </section>
     </>
   );
